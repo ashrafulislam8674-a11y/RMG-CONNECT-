@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RMG Connect</title>
+<style>
+:root{--navy:#102a43;--blue:#1769aa;--cyan:#e8f4fb;--ink:#243b53;--muted:#627d98;--line:#d9e2ec;--bg:#f4f7fb;--white:#fff;--green:#16865b}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:white;padding:16px max(18px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{font-size:24px;font-weight:800;letter-spacing:.2px}.brand span{color:#72d0ef}
+nav{display:flex;gap:8px;flex-wrap:wrap}button,.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer}
+nav button{background:transparent;color:#eaf4fb}nav button.active,nav button:hover{background:#244b6b}
+.wrap{max-width:1120px;margin:26px auto;padding:0 18px}.hero{background:linear-gradient(120deg,#123b5d,#1677ad);color:white;border-radius:18px;padding:30px;display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center}
+.hero h1{font-size:clamp(27px,4vw,42px);margin:0 0 10px}.hero p{color:#dcecf7;line-height:1.6}.hero-art{font-size:78px;text-align:center}
+.search{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}.search input{flex:1;min-width:180px}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);font:inherit}
+.search input{width:auto}.section-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 14px;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:white;border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 3px 12px #102a4308}
+.tag{display:inline-block;background:var(--cyan);color:#1769aa;border-radius:20px;padding:5px 9px;font-size:12px;font-weight:700}
+.card h3{margin:12px 0 7px;color:var(--navy)}.meta{color:var(--muted);font-size:14px;line-height:1.7}.card .bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:18px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formgrid .full{grid-column:1/-1}.hidden{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f0f7fc;border-radius:10px;padding:15px}.stat b{font-size:25px;color:var(--blue);display:block}
+footer{text-align:center;color:var(--muted);padding:28px 12px;font-size:13px}
+.notice{padding:12px;border-radius:9px;background:#fff7df;color:#745400;font-size:13px;line-height:1.5}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero-art{display:none}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}}
+</style></head>
+<body>
+<header><div class="brand">RMG <span>Connect</span></div><nav>
+<button class="active" data-page="home" data-en="Home" data-bn="হোম">Home</button>
+<button data-page="jobs" data-en="Find Jobs" data-bn="চাকরি খুঁজুন">Find Jobs</button>
+<button data-page="admin" data-en="Admin" data-bn="অ্যাডমিন">Admin</button>
+<button id="langBtn">বাংলা</button></nav></header>
+<main class="wrap">
+<section id="home">
+<div class="hero"><div><h1 data-en="Your career connection to the RMG industry" data-bn="RMG শিল্পে আপনার ক্যারিয়ারের সংযোগ">Your career connection to the RMG industry</h1>
+<p data-en="Discover garment and textile opportunities, explore roles, and connect with employers." data-bn="গার্মেন্টস ও টেক্সটাইলের চাকরি খুঁজুন, পদ সম্পর্কে জানুন এবং নিয়োগদাতার সঙ্গে যুক্ত হন।">Discover garment and textile opportunities, explore roles, and connect with employers.</p>
+<div class="search"><input id="heroSearch" placeholder="Search job title or company"><button onclick="searchFromHero()" data-en="Search Jobs" data-bn="চাকরি খুঁজুন">Search Jobs</button></div></div><div class="hero-art">🏭</div></div>
+<div class="section-head"><h2 data-en="Explore job categories" data-bn="চাকরির ক্যাটাগরি">Explore job categories</h2></div>
+<div class="grid" id="categories"></div>
+<div class="section-head"><h2 data-en="Latest opportunities" data-bn="সর্বশেষ চাকরি">Latest opportunities</h2><button onclick="showPage('jobs')" data-en="View all" data-bn="সব দেখুন">View all</button></div><div class="grid" id="latest"></div>
+</section>
+<section id="jobs" class="hidden">
+<div class="section-head"><h1 data-en="Find your next opportunity" data-bn="আপনার পরবর্তী চাকরি খুঁজুন">Find your next opportunity</h1></div>
+<div class="panel"><div class="formgrid"><input id="jobSearch" placeholder="Search title, company or location"><select id="categoryFilter"><option value="">All categories</option></select></div></div>
+<div class="section-head"><h2 data-en="Available jobs" data-bn="চলমান নিয়োগ">Available jobs</h2><span id="jobCount" class="meta"></span></div><div class="grid" id="jobList"></div>
+</section>
+<section id="admin" class="hidden">
+<div class="section-head"><h1 data-en="Admin dashboard" data-bn="অ্যাডমিন ড্যাশবোর্ড">Admin dashboard</h1></div>
+<div class="notice" data-en="Demo mode: this starter stores sample posts in this browser only. Add secure authentication and a database before public launch." data-bn="ডেমো মোড: এই স্টার্টার শুধু এই ব্রাউজারে নমুনা পোস্ট সংরক্ষণ করে। সবার জন্য চালুর আগে নিরাপদ লগইন ও ডেটাবেস যুক্ত করতে হবে।">Demo mode: this starter stores sample posts in this browser only. Add secure authentication and a database before public launch.</div>
+<div class="panel"><div class="stats"><div class="stat"><b id="totalJobs">0</b><span data-en="Total job posts" data-bn="মোট চাকরির পোস্ট">Total job posts</span></div><div class="stat"><b id="totalCategories">0</b><span data-en="Categories" data-bn="ক্যাটাগরি">Categories</span></div><div class="stat"><b>0</b><span data-en="Applications (backend pending)" data-bn="আবেদন (ব্যাকএন্ড বাকি)">Applications (backend pending)</span></div></div></div>
+<div class="panel"><h2 data-en="Publish a job" data-bn="চাকরি প্রকাশ করুন">Publish a job</h2><form id="jobForm" class="formgrid">
+<input id="title" required placeholder="Job title / পদের নাম"><input id="company" required placeholder="Company name / প্রতিষ্ঠানের নাম">
+<select id="category" required></select><input id="location" required placeholder="Location / কর্মস্থল">
+<input id="salary" placeholder="Salary / বেতন (optional)"><input id="deadline" type="date" aria-label="Application deadline">
+<textarea id="description" class="full" rows="3" placeholder="Job description / কাজের বিবরণ"></textarea>
+<input id="apply" class="full" placeholder="Application link or email (optional)"><button class="full" type="submit" data-en="Publish job" data-bn="চাকরি প্রকাশ করুন">Publish job</button></form></div>
+<div class="panel"><h2 data-en="Manage posts" data-bn="পোস্ট পরিচালনা">Manage posts</h2><div id="adminList"></div></div>
+</section>
+</main><footer>RMG Connect · <span data-en="Connecting talent with opportunity" data-bn="দক্ষতার সঙ্গে সুযোগের সংযোগ">Connecting talent with opportunity</span></footer>
+<script>
+const categories=["CAD & Marker","Cutting","Quality","Production","Merchandising","Textile & Others"];
+const seed=[
+{id:1,title:"CAD Markerman",company:"R&G BD Garments Co. Ltd.",category:"CAD & Marker",location:"Mawna, Gazipur",salary:"Negotiable",deadline:"",description:"Prepare production markers, check size ratios and support fabric utilization.",apply:""},
+{id:2,title:"Cutting QC",company:"Southern Garments Ltd.",category:"Cutting",location:"Gazipur",salary:"As per company policy",deadline:"",description:"Check cut panel quality, measurements and pattern conformity.",apply:""},
+{id:3,title:"Quality Inspector",company:"Garments Manufacturing Unit",category:"Quality",location:"Savar, Dhaka",salary:"Negotiable",deadline:"",description:"Inspect product quality and report defects according to quality standards.",apply:""}
+];
+let jobs=JSON.parse(localStorage.getItem("rmgconnect_jobs")||"null")||seed;
+let lang="en";
+const t=(en,bn)=>lang==="en"?en:bn;
+function save(){localStorage.setItem("rmgconnect_jobs",JSON.stringify(jobs))}
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function card(j){return `<article class="card"><span class="tag">${esc(j.category)}</span><h3>${esc(j.title)}</h3><div class="meta">🏢 ${esc(j.company)}<br>📍 ${esc(j.location)}<br>💰 ${esc(j.salary||"Negotiable")}</div><p>${esc(j.description||"")}</p><div class="bottom"><small class="meta">${j.deadline?"Deadline: "+esc(j.deadline):"RMG Connect listing"}</small>${j.apply?`<a class="btn" href="${esc(j.apply)}" target="_blank" rel="noopener">Apply</a>`:"<span class='tag'>Details</span>"}</div></article>`}
+function render(){
+document.getElementById("categories").innerHTML=categories.map(c=>`<div class="card"><span class="tag">RMG</span><h3>${esc(c)}</h3><div class="meta">${jobs.filter(j=>j.category===c).length} ${t("open posts","টি পোস্ট")}</div></div>`).join("");
+document.getElementById("latest").innerHTML=jobs.slice(0,3).map(card).join("");
+let q=(document.getElementById("jobSearch")?.value||"").toLowerCase(),cat=document.getElementById("categoryFilter")?.value||"";
+let filtered=jobs.filter(j=>(!cat||j.category===cat)&&[j.title,j.company,j.location,j.category].join(" ").toLowerCase().includes(q));
+document.getElementById("jobList").innerHTML=filtered.length?filtered.map(card).join(""):`<div class="panel">${t("No jobs found.","কোনো চাকরি পাওয়া যায়নি।")}</div>`;
+document.getElementById("jobCount").textContent=filtered.length+" "+t("results","টি ফলাফল");
+document.getElementById("totalJobs").textContent=jobs.length;document.getElementById("totalCategories").textContent=categories.length;
+document.getElementById("adminList").innerHTML=jobs.map(j=>`<div class="bottom" style="padding:10px 0;border-bottom:1px solid var(--line)"><span><b>${esc(j.title)}</b><br><small>${esc(j.company)} · ${esc(j.location)}</small></span><button onclick="deleteJob(${j.id})" style="background:#a83232">Delete</button></div>`).join("")||"No posts";
+}
+function showPage(p){document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));document.getElementById(p).classList.remove("hidden");document.querySelectorAll("nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===p));if(p==="admin")render()}
+function searchFromHero(){document.getElementById("jobSearch").value=document.getElementById("heroSearch").value;showPage("jobs");render()}
+function deleteJob(id){jobs=jobs.filter(j=>j.id!==id);save();render()}
+document.querySelectorAll("nav button[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+document.getElementById("langBtn").onclick=()=>{lang=lang==="en"?"bn":"en";document.getElementById("langBtn").textContent=lang==="en"?"বাংলা":"English";document.querySelectorAll("[data-en]").forEach(el=>el.textContent=el.dataset[lang]);render()};
+document.getElementById("jobSearch").addEventListener("input",render);
+document.getElementById("categoryFilter").innerHTML='<option value="">All categories / সব ক্যাটাগরি</option>'+categories.map(c=>`<option>${c}</option>`).join("");
+document.getElementById("category").innerHTML=categories.map(c=>`<option>${c}</option>`).join("");
+document.getElementById("categoryFilter").addEventListener("change",render);
+document.getElementById("jobForm").onsubmit=e=>{e.preventDefault();jobs.unshift({id:Date.now(),title:title.value,company:company.value,category:category.value,location:location.value,salary:salary.value,deadline:deadline.value,description:description.value,apply:apply.value});save();e.target.reset();render();alert(t("Job published in this demo.","ডেমোতে চাকরির পোস্ট প্রকাশ হয়েছে।"))};
+render();
+</script></body></html>
